@@ -21,6 +21,10 @@ def canUnlockAll(boxes):
     Return `True` if all boxes can be opened, else return `False`.
     """
 
+    # If we have only the first unlocked box or no box at all, return True
+    if len(boxes) <= 1:
+        return True
+
     # Declare a set of currently unlocked boxes's indices
     # and initialize it with `0` as the first box is already unlocked
     open_boxes_idx = {0}
