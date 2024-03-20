@@ -3,7 +3,25 @@
 Implementation of a solution to the Minimum Operations problem
 Refer to the README to read the problem's detailed explanation
 """
-from collections import deque
+
+
+def is_prime(n: int) -> bool:
+    """Return whether n is prime or not"""
+
+    if n <= 1:
+        return False
+    elif n <= 3:
+        return True
+    elif n % 2 == 0 or n % 3 == 0:
+        return False
+
+    i = 5
+    while i ** 2 <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+
+    return True
 
 
 def minOperations(n: int) -> int:
@@ -28,69 +46,21 @@ def minOperations(n: int) -> int:
     if n <= 1:
         return 0
 
-    # Initially, we have one 'H'
-    # And we obviously must Copy All and Paste (2 operations) at least once
+    # If n is prime we can only get it by pasting it n times
+    if is_prime(n):
+        return n
 
-    # Current state:
-    state = {'characters': 2, 'toPaste': 1, 'operations': 2}
+    # Initialize Divisor and Prime Factors Sum
+    divisor = 2
+    factors_sum = 0
 
-    # Queue to traverse all possible states
-    states_queue = deque()
+    # Extract n's Prime Factors Sum
+    num = n
+    while num > 1:
+        while num % divisor == 0:
+            factors_sum += divisor
+            num //= divisor
+        divisor += 1
 
-    # Append the current state
-    states_queue.appendleft(state)
-
-    currently_copied = 1  # Equal to the current state['toPaste']
-
-    solution = n  # The worst: Copy All + `n - 1` Paste = n
-
-    # Traverse all possible states using Breadth First Search
-    # Until we exceed `n` 'H' characters
-    while len(states_queue) > 0:
-        current_state = states_queue.popleft()
-
-        # Store current stats
-        characters = current_state['characters']
-        toPaste = current_state['toPaste']
-        operations = current_state['operations']
-
-        # If `operations` exceeds our current solution, exit
-        if operations > solution:
-            break
-
-        # Add a sole Paste operation if relevant
-        if characters + toPaste <= n:
-            # This operation only adds `toPaste` to the existing characters
-            new_state = {
-                'characters': characters + toPaste,
-                'toPaste': toPaste,
-                'operations': operations + 1
-            }
-
-            # Append it if it may provide a better solution
-            if new_state['operations'] < solution:
-                # Update solution if characters == n
-                if new_state['characters'] == n:
-                    solution = new_state['operations']
-                else:
-                    states_queue.append(new_state)
-
-        # Add a Copy All/Paste combo if relevant
-        if toPaste == currently_copied and characters * 2 <= n:
-            # The combination Copy All/Paste doubles the characters
-            new_state = {
-                'characters': characters * 2,
-                'toPaste': characters,
-                'operations': operations + 2
-            }
-
-            # Append it if it may provide a better solution
-            if new_state['operations'] < solution:
-                # Update solution if characters == n
-                if new_state['characters'] == n:
-                    solution = new_state['operations']
-                else:
-                    states_queue.append(new_state)
-
-    # Return the solution
-    return solution
+    # Return the minimum required operations which is the n's PF Sum
+    return factors_sum
