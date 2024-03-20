@@ -19,6 +19,10 @@ def minOperations(n: int) -> int:
         If n is impossible to achieve or no operations are needed, return 0.
     """
 
+    # If n is not an int
+    if not type(n) is int:
+        return 0
+
     # We can't achieve n if n < 1
     # And if n == 1, it's exactly the initial state so we do nothing
     if n <= 1:
@@ -49,6 +53,10 @@ def minOperations(n: int) -> int:
         characters = current_state['characters']
         toPaste = current_state['toPaste']
         operations = current_state['operations']
+
+        # If `operations` exceeds our current solution, exit
+        if operations > solution:
+            break
 
         # Add a sole Paste operation if relevant
         if characters + toPaste <= n:
