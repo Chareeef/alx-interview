@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """
 Implementation of a solution to the Minimum Operations problem
 Refer to the README to read the problem's detailed explanation
