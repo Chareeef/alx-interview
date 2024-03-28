@@ -82,23 +82,28 @@ if __name__ == '__main__':
         # Read through stdin
         for line in sys.stdin:
 
-            # Check for correct log
-            match = re.match(pattern, line)
-            if not match:
-                continue
+            try:
+
+                # Check for correct log
+                match = re.match(pattern, line)
+                if not match:
+                    continue
+
+                # Update file_size
+                size = int(match.group('size'))
+                file_size += size
+
+                # Update status_codes
+                code = match.group('code')
+                status_codes[code] = status_codes.get(code, 0) + 1
+
+            except BaseException:
+                pass
 
             # Increment count_read
             count_read += 1
             if count_read % 10 == 0:
                 print_stats(file_size, status_codes)
-
-            # Update file_size
-            size = int(match.group('size'))
-            file_size += size
-
-            # Update status_codes
-            code = match.group('code')
-            status_codes[code] = status_codes.get(code, 0) + 1
 
     # Handle SIGINT
     except KeyboardInterrupt:
