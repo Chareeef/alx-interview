@@ -44,7 +44,6 @@ File size: 16305
 ```
 
 """
-import re
 import sys
 from typing import Dict
 
@@ -62,12 +61,6 @@ def print_stats(file_size: int, status_codes: Dict[str, int]) -> None:
 
 if __name__ == '__main__':
 
-    # Define the log pattern
-    pattern = r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - ' +\
-              r'\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+?\] ' +\
-              r'"GET /projects/260 HTTP/1\.1" ' +\
-              r'(?P<code>.*) (?P<size>.+)$'
-
     # Initialize File Size
     file_size = 0
 
@@ -84,20 +77,16 @@ if __name__ == '__main__':
         for line in sys.stdin:
 
             try:
+                infos = line[:-1].split()
 
-                # Check for correct log
-                match = re.match(pattern, line)
+                # Update file_size
+                size = int(infos[-1])
+                file_size += size
 
-                if match:
-
-                    # Update file_size
-                    size = int(match.group('size'))
-                    file_size += size
-
-                    # Update status_codes
-                    code = int(match.group('code'))
-                    if code in valid_codes:
-                        status_codes[code] = status_codes.get(code, 0) + 1
+                # Update status_codes
+                code = int(infos[-2])
+                if code in valid_codes:
+                    status_codes[code] = status_codes.get(code, 0) + 1
 
             except BaseException:
                 pass
