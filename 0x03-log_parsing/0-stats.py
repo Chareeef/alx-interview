@@ -91,17 +91,17 @@ if __name__ == '__main__':
         # Read through stdin
         for line in sys.stdin:
 
+            # Check for correct log
+            match = re.match(pattern, line)
+            if not match:
+                continue
+
             # Increment count read
             count_read += 1
 
             if count_read >= 10:
                 count_read = 0
                 print_stats(file_size, status_codes)
-
-            # Check for correct log
-            match = re.match(pattern, line)
-            if not match:
-                continue
 
             # Update file_size
             size = int(match.group('size'))
