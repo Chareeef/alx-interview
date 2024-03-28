@@ -61,7 +61,6 @@ def print_stats(file_size: int, status_codes: Dict[str, int]) -> None:
         print(f'{code}: {stat}')
 
 
-
 if __name__ == '__main__':
 
     # Define the log pattern
@@ -78,7 +77,7 @@ if __name__ == '__main__':
 
     # Track read lines
     count_read = 0
-    
+
     # Handle SIGINT
     def sigint_handler(signal, frame):
         """ Gracefully Handle SIGINT """
@@ -87,26 +86,31 @@ if __name__ == '__main__':
     # Bind handler
     signal.signal(signal.SIGINT, sigint_handler)
 
+    try:
 
-    # Read through stdin
-    for line in sys.stdin:
+        # Read through stdin
+        for line in sys.stdin:
 
-        # Increment count read
-        count_read += 1
+            # Increment count read
+            count_read += 1
 
-        if count_read >= 10:
-            count_read = 0
-            print_stats(file_size, status_codes)
+            if count_read >= 10:
+                count_read = 0
+                print_stats(file_size, status_codes)
 
-        # Check for correct log
-        match = re.match(pattern, line)
-        if not match:
-            continue
+            # Check for correct log
+            match = re.match(pattern, line)
+            if not match:
+                continue
 
-        # Update file_size
-        size = int(match.group('size'))
-        file_size += size
+            # Update file_size
+            size = int(match.group('size'))
+            file_size += size
 
-        # Update status_codes
-        code = match.group('code')
-        status_codes[code] = status_codes.get(code, 0) + 1
+            # Update status_codes
+            code = match.group('code')
+            status_codes[code] = status_codes.get(code, 0) + 1
+
+    # Handle SIGINT
+    except KeyboardInterrupt:
+        pass
