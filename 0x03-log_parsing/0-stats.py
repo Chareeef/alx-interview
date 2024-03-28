@@ -66,13 +66,14 @@ if __name__ == '__main__':
     pattern = r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - ' +\
               r'\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+?\] ' +\
               r'"GET /projects/260 HTTP/1\.1" ' +\
-              r'(?P<code>200|301|400|401|403|404|405|500) (?P<size>\d+)$'
+              r'(?P<code>.*) (?P<size>.+)$'
 
     # Initialize File Size
     file_size = 0
 
-    # Initialize Status Codes dictionary
+    # Initialize Status Codes dictionary and define valid codes
     status_codes = {}
+    valid_codes = [200, 301, 400, 401, 403, 404, 405, 500]
 
     # Track read lines
     count_read = 0
@@ -94,8 +95,9 @@ if __name__ == '__main__':
                     file_size += size
 
                     # Update status_codes
-                    code = match.group('code')
-                    status_codes[code] = status_codes.get(code, 0) + 1
+                    code = int(match.group('code'))
+                    if code in valid_codes:
+                        status_codes[code] = status_codes.get(code, 0) + 1
 
             except BaseException:
                 pass
