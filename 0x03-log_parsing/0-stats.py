@@ -45,7 +45,6 @@ File size: 16305
 
 """
 import re
-import signal
 import sys
 from typing import Dict
 
@@ -78,14 +77,6 @@ if __name__ == '__main__':
     # Track read lines
     count_read = 0
 
-    # Handle SIGINT
-    def sigint_handler(signal, frame):
-        """ Gracefully Handle SIGINT """
-        print_stats(file_size, status_codes)
-
-    # Bind handler
-    signal.signal(signal.SIGINT, sigint_handler)
-
     try:
 
         # Read through stdin
@@ -96,11 +87,9 @@ if __name__ == '__main__':
             if not match:
                 continue
 
-            # Increment count read
+            # Increment count_read
             count_read += 1
-
-            if count_read >= 10:
-                count_read = 0
+            if count_read % 10 == 0:
                 print_stats(file_size, status_codes)
 
             # Update file_size
@@ -113,4 +102,5 @@ if __name__ == '__main__':
 
     # Handle SIGINT
     except KeyboardInterrupt:
-        pass
+        print_stats(file_size, status_codes)
+        raise
