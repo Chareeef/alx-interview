@@ -60,6 +60,10 @@ def validUTF8(data: List[int]) -> bool:
     while idx < total_bytes:
         byte = data[idx]
 
+        # Ensure it is a byte (8-bit unsigned integer)
+        if byte < 0 or byte > 255:
+            return False
+
         if single_UTF8_byte(byte):
             # Move forward by 1
             idx += 1
