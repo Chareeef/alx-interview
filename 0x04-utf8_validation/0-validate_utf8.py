@@ -60,14 +60,6 @@ def validUTF8(data: List[int]) -> bool:
     while idx < total_bytes:
         byte = data[idx]
 
-        # Ensure it is a byte (8-bit unsigned integer)
-        if type(byte) is not int or byte < 0 or byte > 255:
-            return False
-
-        # Invalid if a continuation byte isn't preceded by a header byte
-        if continuation_UTF8_byte(byte):
-            return False
-
         if single_UTF8_byte(byte):
             # Move forward by 1
             idx += 1
