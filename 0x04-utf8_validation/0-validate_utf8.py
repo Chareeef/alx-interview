@@ -13,13 +13,13 @@ def validUTF8(data: List[int]) -> bool:
         """Check if byte represents a single UTF-8 byte
         e.g.: 0xxxxxxx
         """
-        return True if byte >> 7 == 0 else False
+        return True if byte >> 7 & 1 == 0 else False
 
     def continuation_UTF8_byte(byte: int) -> bool:
         """Check if byte represents a continuation UTF-8 byte
         e.g.: 10xxxxxx
         """
-        if byte >> 7 == 1 and byte >> 6 & 1 == 0:
+        if byte >> 7 & 1 == 1 and byte >> 6 & 1 == 0:
             return True
         else:
             return False
@@ -28,7 +28,7 @@ def validUTF8(data: List[int]) -> bool:
         """Check if the byte at data[idx] starts a 2-byte UTF-8 grapheme
         e.g.: 110xxxxx
         """
-        if byte >> 7 == 1 and byte >> 6 & 1 == 1 and byte >> 5 & 1 == 0:
+        if byte >> 7 & 1 == 1 and byte >> 6 & 1 == 1 and byte >> 5 & 1 == 0:
             return True
         else:
             return False
@@ -37,7 +37,7 @@ def validUTF8(data: List[int]) -> bool:
         """Check if the byte at data[idx] starts a 3-byte UTF-8 grapheme
         e.g.: 1110xxxx
         """
-        if byte >> 7 == 1 and byte >> 6 & 1 == 1 and byte >> 5 & 1 == 1\
+        if byte >> 7 & 1 == 1 and byte >> 6 & 1 == 1 and byte >> 5 & 1 == 1\
                 and byte >> 4 & 1 == 0:
             return True
         else:
@@ -47,7 +47,7 @@ def validUTF8(data: List[int]) -> bool:
         """Check if the byte at data[idx] starts a 4-byte UTF-8 grapheme
         e.g.: 11110xxx
         """
-        if byte >> 7 == 1 and byte >> 6 & 1 == 1 and byte >> 5 & 1 == 1\
+        if byte >> 7 & 1== 1 and byte >> 6 & 1 == 1 and byte >> 5 & 1 == 1\
                 and byte >> 4 & 1 == 1 and byte >> 3 & 1 == 0:
             return True
         else:
@@ -62,6 +62,10 @@ def validUTF8(data: List[int]) -> bool:
 
         # Ensure it is a byte (8-bit unsigned integer)
         if byte < 0 or byte > 255:
+            return False
+
+        # Invalid if a continuation byte isn't preceded by a header byte
+        if continuation_UTF8_byte(byte):
             return False
 
         if single_UTF8_byte(byte):
