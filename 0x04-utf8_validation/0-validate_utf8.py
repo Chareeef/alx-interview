@@ -47,7 +47,7 @@ def validUTF8(data: List[int]) -> bool:
         """Check if the byte at data[idx] starts a 4-byte UTF-8 grapheme
         e.g.: 11110xxx
         """
-        if byte >> 7 & 1== 1 and byte >> 6 & 1 == 1 and byte >> 5 & 1 == 1\
+        if byte >> 7 & 1 == 1 and byte >> 6 & 1 == 1 and byte >> 5 & 1 == 1\
                 and byte >> 4 & 1 == 1 and byte >> 3 & 1 == 0:
             return True
         else:
@@ -61,7 +61,7 @@ def validUTF8(data: List[int]) -> bool:
         byte = data[idx]
 
         # Ensure it is a byte (8-bit unsigned integer)
-        if byte < 0 or byte > 255:
+        if type(byte) is not int or byte < 0 or byte > 255:
             return False
 
         # Invalid if a continuation byte isn't preceded by a header byte
@@ -104,6 +104,10 @@ def validUTF8(data: List[int]) -> bool:
 
             # Move forward by 4
             idx += 4
+            continue
+        else:
+            # If none of the above cases apply, the UTF-8 encoding is invalid
+            return False
 
     # If we exit the loop, it means that data is a valid UTF-8 encoding
     return True
