@@ -10,27 +10,37 @@ def rotate_2d_matrix(matrix):
     # Matrix dimension
     n = len(matrix)
 
-    # Transpose matrix
-    for i in range(n):
-        for j in range(i, n):
-            temp = matrix[i][j]
-            matrix[i][j] = matrix[j][i]
-            matrix[j][i] = temp
+    # Loop through matrix cycles
+    for x in range(int(n / 2)):
+        for y in range(x, n - 1 - x):
 
-    # Reverse each row
-    for idx in range(n):
-        matrix[idx].reverse()
+            # Store top
+            temp = matrix[x][y]
+
+            # To top
+            matrix[x][y] = matrix[n - 1 - y][x]
+
+            # To left
+            matrix[n - 1 - y][x] = matrix[n - 1 - x][n - 1 - y]
+
+            # To down
+            matrix[n - 1 - x][n - 1 - y] = matrix[y][n - 1 - x]
+
+            # To right
+            matrix[y][n - 1 - x] = temp
 
 
 if __name__ == "__main__":
-    matrix = [[1, 2, 3, 'l'],
-              [4, 5, 6, 'o'],
-              [7, 8, 9, 'o'],
-              [10, 11, 12, 'l']]
+    matrix = [[1, 2, 3, 4],
+              [5, 6, 7, 8],
+              [9, 10, 11, 12],
+              [13, 14, 15, 16]]
 
     for r in matrix:
         print(r)
+
     rotate_2d_matrix(matrix)
-    print('ROTAATE!')
+
+    print('\nROTAATE!\n')
     for r in matrix:
         print(r)
