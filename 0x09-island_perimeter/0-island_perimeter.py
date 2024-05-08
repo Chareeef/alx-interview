@@ -8,15 +8,23 @@ def island_perimeter(grid):
     The grid's specifications are detailed in the README
     """
 
+    # Compute the grid's dimensions
+    height = len(grid)
+    if height == 0:
+        return 0
+
+    width = len(grid[0])
+    if height == 0:
+        return 0
+
     # The island perimeter is the sum of edges of each land cell,
     # Knowing that for each land cell, cell_edges = 4 - adjacent_ones
 
     # So let's compute that perimeter
     perimeter = 0
-    N = len(grid)
 
-    for i in range(N):
-        for j in range(N):
+    for i in range(height):
+        for j in range(width):
 
             # If we hit a land cell
             if grid[i][j] == 1:
@@ -29,11 +37,11 @@ def island_perimeter(grid):
                     adjacent_ones += 1
 
                 # Check Down
-                if i < N - 1 and grid[i + 1][j] == 1:
+                if i < height - 1 and grid[i + 1][j] == 1:
                     adjacent_ones += 1
 
                 # Check Right
-                if j < N - 1 and grid[i][j + 1] == 1:
+                if j < width - 1 and grid[i][j + 1] == 1:
                     adjacent_ones += 1
 
                 # Check Left
