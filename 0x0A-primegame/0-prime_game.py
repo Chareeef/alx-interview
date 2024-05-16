@@ -114,7 +114,7 @@ def isWinner(x, nums):
         else:
             Ben += 1
 
-    # Return None if it is a draw, otherwise return th winner's name
+    # Return None if it is a draw, otherwise return the winner's name
     if Maria == Ben:
         return None
     else:
