@@ -23,39 +23,39 @@ def isWinner(x, nums):
     and if the winner cannot be determined, return None
     """
 
-    def getPrimes(n, useMax):
-        """Define, Memoize and Return the primes <= n
-        If `useMax` is True, retrieve primes from MaxPrimes,
-        and from Sieve otherwise
-        """
-
-        global Sieve
-        global Primes
-        global MaxPrimes
-
-        # Define
-        if useMax:
-
-            # Retrieve from already found primes stored in MaxPrimes
-            n_primes = [num for num in MaxPrimes if num <= n]
-
-        else:
-
-            # Retrieve from Sieve
-            n_primes = [i for i in range(n + 1) if Sieve[i] is True]
-
-            # Update MaxPrimes
-            MaxPrimes = n_primes
-
-        # Memoize
-        Primes[n] = n_primes
-
-        # Return
-        return n_primes
-
     def findPrimes(n):
         """Return an array of all the prime numbers less than or equal to `n`
         """
+
+        def getMemoizePrimes(n, useMax):
+            """Define, Memoize and Return the primes <= n
+            If `useMax` is True, retrieve primes from MaxPrimes,
+            and from Sieve otherwise
+            """
+
+            global Sieve
+            global Primes
+            global MaxPrimes
+
+            # Define
+            if useMax:
+
+                # Retrieve from already found primes stored in MaxPrimes
+                n_primes = [num for num in MaxPrimes if num <= n]
+
+            else:
+
+                # Retrieve from Sieve
+                n_primes = [i for i in range(n + 1) if Sieve[i] is True]
+
+                # Update MaxPrimes
+                MaxPrimes = n_primes
+
+            # Memoize
+            Primes[n] = n_primes
+
+            # Return
+            return n_primes
 
         global Sieve
         global N
@@ -71,7 +71,7 @@ def isWinner(x, nums):
 
             # If not: Define, Memoize and Return them
             else:
-                return getPrimes(n, True)
+                return getMemoizePrimes(n, True)
 
         # If n is beyond the current Sieve, expand it
         else:
@@ -95,7 +95,7 @@ def isWinner(x, nums):
                 i += 1
 
             # Define, Memoize and Return the primes <= n
-            return getPrimes(n, False)
+            return getMemoizePrimes(n, False)
 
     # Initialize scores
     Maria = 0
