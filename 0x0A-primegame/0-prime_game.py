@@ -10,12 +10,15 @@ Assuming Maria always goes first and both players play optimally,
 our task is to determine who the winner of each game is.
 """
 
-# Create an initial Sieve Of Eratosthenes from 0 to 2
+# Create an initial Sieve Of Eratosthenes from 0 (for better readability) to 2
 Sieve = [False, False, True]
 
-# Memoize initial primes less than or equal to the largest N so far
+# Memoize initial prime numbers less than or equal to the largest N so far
 N = 2
 Primes = {2: [2]}
+
+# Define All the primes found so far
+MaxPrimes = [2]
 
 
 def isWinner(x, nums):
@@ -29,17 +32,34 @@ def isWinner(x, nums):
     """
     pass
 
-def findPrimes(n):
-    """From Sieve, Define, Memoize and Return the primes <= n
+
+def findPrimes(n, useMax):
+    """Define, Memoize and Return the primes <= n
+    If `useMax` is True, retrieve primes from MaxPrimes,
+    and from Sieve otherwise
     """
 
     global Sieve
     global Primes
+    global MaxPrimes
 
     print(f'For {n}\'s primes, define, Memoize and Return them')
 
     # Define
-    n_primes = [i for i in range(n + 1) if Sieve[i] == True]
+    if useMax:
+        print('Use MaxPrimes')
+
+        # Retrieve from already found primes stored in MaxPrimes
+        n_primes = [num for num in MaxPrimes if num <= n]
+
+    else:
+        print('Use Sieve and update MaxPrimes')
+
+        # Retrieve from Sieve
+        n_primes = [i for i in range(n + 1) if Sieve[i] is True]
+
+        # Update MaxPrimes
+        MaxPrimes = n_primes
 
     # Memoize
     Primes[n] = n_primes
@@ -68,7 +88,7 @@ def sieveOfEratosthenes(n):
 
         # If not: Define, Memoize and Return them
         else:
-            return findPrimes(n)
+            return findPrimes(n, True)
 
     # If n is beyond the current Sieve, expand it
     else:
@@ -95,8 +115,8 @@ def sieveOfEratosthenes(n):
             i += 1
 
         # Define, Memoize and Return the primes <= n
-        return findPrimes(n)
-        
+        return findPrimes(n, False)
+
 
 if __name__ == '__main__':
     print('\tn = 2:')
@@ -122,4 +142,3 @@ if __name__ == '__main__':
     print('\tn = 50:')
     print('50 =>', sieveOfEratosthenes(50))
     print('\n\t===\n')
-
