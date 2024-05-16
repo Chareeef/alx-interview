@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Prime Game
+"""Prime Game (Rules are explained in the README)
 """
 
 # Create an initial Sieve Of Eratosthenes from 0 (for better readability) to 2

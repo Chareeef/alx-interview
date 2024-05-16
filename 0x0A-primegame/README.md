@@ -12,6 +12,12 @@ My goal, and I'm absolutely thrilled to take it on, is to implement the `isWinne
 
 The `isWinner` function takes in the number of rounds (`x`) and an array of values representing the upper limit (`nums`) for each round. It's my job to dive deep into the code, unleash my coding superpowers, and determine the champion of each round! 💪🏽💥
 
+**Game rules:**
+
+*Maria* and *Ben* are playing a game. Given a set of consecutive integers starting from **1** up to and including **n**, they take turns choosing a prime number from the set and removing that number and its multiples from the set. The player that cannot make a move loses the game.
+
+They play **x** rounds of the game, where **n** may be different for each round. Assuming *Maria* **always goes first** and both players play optimally.
+
 ## Test Example and Output 🚀📋
 
 To illustrate how the `isWinner` function works, let's consider an example:
