@@ -7,7 +7,7 @@ The player that cannot make a move loses the game.
 
 They play x rounds of the game, where n may be different for each round.
 Assuming Maria always goes first and both players play optimally,
-our task is to determine who the winner of each game is.
+our task is to determine who is the winner of each game.
 """
 
 # Create an initial Sieve Of Eratosthenes from 0 (for better readability) to 2
@@ -24,51 +24,38 @@ MaxPrimes = [2]
 def isWinner(x, nums):
     """Determine the winner of the Prime Game between Ben and Maria, where:
         - x: the number of rounds
-        - nums: is an array of numbers, each `n` represent the maximum of the
+        - nums: an array of numbers, each `n` represent the maximum of the
         `index + 1`-th round's set
 
     Return: name of the player that won the most rounds,
     and if the winner cannot be determined, return None
     """
-    pass
 
+    # Initialize scores
+    Maria = 0
+    Ben = 0
 
-def findPrimes(n, useMax):
-    """Define, Memoize and Return the primes <= n
-    If `useMax` is True, retrieve primes from MaxPrimes,
-    and from Sieve otherwise
-    """
+    # Play rounds
+    for i in range(x):
 
-    global Sieve
-    global Primes
-    global MaxPrimes
+        # Compute availabe prime numbers for this round
+        primes = findPrimes(nums[i])
 
-    print(f'For {n}\'s primes, define, Memoize and Return them')
+        # Since Maria always begin, if the number of availabe primes
+        # is odd, she wins the round, otherwise, Ben wins
+        if len(primes) % 2 != 0:
+            Maria += 1
+        else:
+            Ben += 1
 
-    # Define
-    if useMax:
-        print('Use MaxPrimes')
-
-        # Retrieve from already found primes stored in MaxPrimes
-        n_primes = [num for num in MaxPrimes if num <= n]
-
+    # Return None if it is a draw, otherwise return th winner's name
+    if Maria == Ben:
+        return None
     else:
-        print('Use Sieve and update MaxPrimes')
-
-        # Retrieve from Sieve
-        n_primes = [i for i in range(n + 1) if Sieve[i] is True]
-
-        # Update MaxPrimes
-        MaxPrimes = n_primes
-
-    # Memoize
-    Primes[n] = n_primes
-
-    # Return
-    return n_primes
+        return 'Maria' if Maria > Ben else 'Ben'
 
 
-def sieveOfEratosthenes(n):
+def findPrimes(n):
     """Return an array of all the prime numbers less than or equal to `n`
     """
 
@@ -79,26 +66,21 @@ def sieveOfEratosthenes(n):
     # If the current Sieve is sufficiently large
     if n <= N:
 
-        print(f'Sieve large enough for {n}')
         # If the prime <= n were already defined, return them
         n_primes = Primes.get(n)
         if n_primes:
-            print(f'{n}\'s primes already defined')
             return n_primes
 
         # If not: Define, Memoize and Return them
-        else:
-            return findPrimes(n, True)
+    else:
+        return getPrimes(n, True)
 
     # If n is beyond the current Sieve, expand it
-    else:
-        print(f'Sieve needs to be expanded for {n}')
+else:
 
-        # Append the needed amount of numbers and set them as True
+    # Append the needed amount of numbers and set them as True
         for _ in range(N, n):
             Sieve.append(True)
-
-        print('Updated length:', len(Sieve))
 
         # Update N
         N = n
@@ -115,30 +97,35 @@ def sieveOfEratosthenes(n):
             i += 1
 
         # Define, Memoize and Return the primes <= n
-        return findPrimes(n, False)
+        return getPrimes(n, False)
 
 
-if __name__ == '__main__':
-    print('\tn = 2:')
-    print('2 =>', sieveOfEratosthenes(2))
-    print('\n\t===\n')
+def getPrimes(n, useMax):
+    """Define, Memoize and Return the primes <= n
+    If `useMax` is True, retrieve primes from MaxPrimes,
+    and from Sieve otherwise
+    """
 
-    print('\tn = 10:')
-    print('10 =>', sieveOfEratosthenes(10))
-    print('\n\t===\n')
+    global Sieve
+    global Primes
+    global MaxPrimes
 
-    print('\tn = 5:')
-    print('5 =>', sieveOfEratosthenes(5))
-    print('\n\t===\n')
+    # Define
+    if useMax:
 
-    print('\tn = 50:')
-    print('50 =>', sieveOfEratosthenes(50))
-    print('\n\t===\n')
+        # Retrieve from already found primes stored in MaxPrimes
+        n_primes = [num for num in MaxPrimes if num <= n]
 
-    print('\tn = 10:')
-    print('10 =>', sieveOfEratosthenes(10))
-    print('\n\t===\n')
+    else:
 
-    print('\tn = 50:')
-    print('50 =>', sieveOfEratosthenes(50))
-    print('\n\t===\n')
+        # Retrieve from Sieve
+        n_primes = [i for i in range(n + 1) if Sieve[i] is True]
+
+        # Update MaxPrimes
+        MaxPrimes = n_primes
+
+    # Memoize
+    Primes[n] = n_primes
+
+    # Return
+    return n_primes
